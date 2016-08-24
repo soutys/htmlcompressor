@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import com.google.javascript.jscomp.CompilationLevel;
-import com.google.javascript.jscomp.JSSourceFile;
+import com.google.javascript.jscomp.SourceFile;
 import com.googlecode.htmlcompressor.analyzer.HtmlAnalyzer;
 import com.googlecode.htmlcompressor.compressor.ClosureJavaScriptCompressor;
 import com.googlecode.htmlcompressor.compressor.Compressor;
@@ -383,9 +383,9 @@ public class CmdLineCompressor {
 				
 				//get externs
 				if(closureExternsOpt.size() > 0) {
-					List<JSSourceFile> externs = new ArrayList<JSSourceFile>();
+					List<SourceFile> externs = new ArrayList<SourceFile>();
 					for(String externFile : closureExternsOpt) {
-						externs.add(JSSourceFile.fromFile(externFile));
+						externs.add(SourceFile.fromFile(externFile));
 					}
 					closureCompressor.setExterns(externs);
 				}

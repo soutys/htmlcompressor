@@ -24,11 +24,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.LimitInputStream;
+import com.google.common.io.ByteStreams;
 import com.google.javascript.jscomp.CompilationLevel;
 import com.google.javascript.jscomp.Compiler;
 import com.google.javascript.jscomp.CompilerOptions;
-import com.google.javascript.jscomp.JSSourceFile;
+import com.google.javascript.jscomp.SourceFile;
 import com.google.javascript.jscomp.Result;
 import com.google.javascript.jscomp.WarningLevel;
 
@@ -53,7 +53,7 @@ public class ClosureJavaScriptCompressor implements Compressor {
 	private Level loggingLevel = Level.SEVERE;
 	private WarningLevel warningLevel = WarningLevel.DEFAULT;
 	private boolean customExternsOnly = false;
-	private List<JSSourceFile> externs = null;
+	private List<SourceFile> externs = null;
 
 	public ClosureJavaScriptCompressor() {
 	}
@@ -68,11 +68,11 @@ public class ClosureJavaScriptCompressor implements Compressor {
 		StringWriter writer = new StringWriter();
 		
 		//prepare source
-		List<JSSourceFile> input = new ArrayList<JSSourceFile>();
-		input.add(JSSourceFile.fromCode("source.js", source));
+		List<SourceFile> input = new ArrayList<SourceFile>();
+		input.add(SourceFile.fromCode("source.js", source));
 		
 		//prepare externs
-		List<JSSourceFile> externsList = new ArrayList<JSSourceFile>();
+		List<SourceFile> externsList = new ArrayList<SourceFile>();
 		if(compilationLevel.equals(CompilationLevel.ADVANCED_OPTIMIZATIONS)) {
 			//default externs
 			if(!customExternsOnly) {
@@ -84,17 +84,17 @@ public class ClosureJavaScriptCompressor implements Compressor {
 			}
 			//add user defined externs
 			if(externs != null) {
-				for(JSSourceFile extern : externs) {
+				for(SourceFile extern : externs) {
 					externsList.add(extern);
 				}
 			}
 			//add empty externs
 			if(externsList.size() == 0) {
-				externsList.add(JSSourceFile.fromCode("externs.js", ""));
+				externsList.add(SourceFile.fromCode("externs.js", ""));
 			}
 		} else {
 			//empty externs
-			externsList.add(JSSourceFile.fromCode("externs.js", ""));
+			externsList.add(SourceFile.fromCode("externs.js", ""));
 		}
 		
 		Compiler.setLoggingLevel(loggingLevel);
@@ -118,13 +118,13 @@ public class ClosureJavaScriptCompressor implements Compressor {
 	}
 	
 	//read default externs from closure.jar
-	private List<JSSourceFile> getDefaultExterns() throws IOException {
+	private List<SourceFile> getDefaultExterns() throws IOException {
 		InputStream input = ClosureJavaScriptCompressor.class.getResourceAsStream("/externs.zip");
 		ZipInputStream zip = new ZipInputStream(input);
-		List<JSSourceFile> externs = Lists.newLinkedList();
+		List<SourceFile> externs = Lists.newLinkedList();
 		for (ZipEntry entry = null; (entry = zip.getNextEntry()) != null;) {
-			LimitInputStream entryStream = new LimitInputStream(zip, entry.getSize());
-			externs.add(JSSourceFile.fromInputStream(entry.getName(), entryStream));
+			InputStream entryStream = ByteStreams.limit(zip, entry.getSize());
+			externs.add(SourceFile.fromInputStream(entry.getName(), entryStream));
 		}
 		return externs;
 	}
@@ -201,12 +201,12 @@ public class ClosureJavaScriptCompressor implements Compressor {
 	}
 
 	/**
-	 * Returns <code>JSSourceFile</code> used as a reference during the compression 
+	 * Returns <code>SourceFile</code> used as a reference during the compression 
 	 * at <code>CompilationLevel.ADVANCED_OPTIMIZATIONS</code> level.
 	 * 
-	 * @return <code>JSSourceFile</code> used as a reference during compression
+	 * @return <code>SourceFile</code> used as a reference during compression
 	 */
-	public List<JSSourceFile> getExterns() {
+	public List<SourceFile> getExterns() {
 		return externs;
 	}
 
@@ -220,14 +220,14 @@ public class ClosureJavaScriptCompressor implements Compressor {
 	 * <p><b>Warning:</b> Using <code>CompilationLevel.ADVANCED_OPTIMIZATIONS</code> could 
 	 * break inline JavaScript if externs are not set properly.
 	 * 
-	 * @param externs <code>JSSourceFile</code> to use as a reference during compression
+	 * @param externs <code>SourceFile</code> to use as a reference during compression
 	 * 
 	 * @see #setCompilationLevel(CompilationLevel)
 	 * @see #setCustomExternsOnly(boolean)
 	 * @see <a href="http://code.google.com/closure/compiler/docs/api-tutorial3.html">Advanced Compilation and Externs</a>
-	 * @see <a href="http://closure-compiler.googlecode.com/svn/trunk/javadoc/com/google/javascript/jscomp/JSSourceFile.html">JSSourceFile</a>
+	 * @see <a href="http://closure-compiler.googlecode.com/svn/trunk/javadoc/com/google/javascript/jscomp/SourceFile.html">SourceFile</a>
 	 */
-	public void setExterns(List<JSSourceFile> externs) {
+	public void setExterns(List<SourceFile> externs) {
 		this.externs = externs;
 	}
 
