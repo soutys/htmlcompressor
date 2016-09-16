@@ -138,7 +138,7 @@ public class HtmlCompressorTest {
 		
 		HtmlCompressor compressor = new HtmlCompressor();
 		compressor.setCompressJavaScript(true);
-		compressor.setJavaScriptCompressor(new ClosureJavaScriptCompressor(CompilationLevel.ADVANCED_OPTIMIZATIONS));
+		compressor.setJavaScriptCompressor(new ClosureJavaScriptCompressor(CompilationLevel.ADVANCED_OPTIMIZATIONS, "UTF-8"));
 		compressor.setRemoveIntertagSpaces(true);
 		
 		assertEquals(result, compressor.compress(source));

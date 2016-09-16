@@ -59,6 +59,7 @@ public class HtmlCompressorTag extends BodyTagSupport {
 	private boolean compressJavaScript = false;
 	private boolean compressCss = false;
 	
+	private String charset = "UTF-8";
 	private String jsCompressor = HtmlCompressor.JS_COMPRESSOR_YUI;
 	
 	//YUICompressor settings
@@ -104,7 +105,7 @@ public class HtmlCompressorTag extends BodyTagSupport {
 		htmlCompressor.setRemoveHttpsProtocol(removeHttpsProtocol);
 		
 		if(compressJavaScript && jsCompressor.equalsIgnoreCase(HtmlCompressor.JS_COMPRESSOR_CLOSURE)) {
-			ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor();
+			ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor(charset);
 			if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_ADVANCED)) {
 				closureCompressor.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
 			} else if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_WHITESPACE)) {
@@ -196,6 +197,13 @@ public class HtmlCompressorTag extends BodyTagSupport {
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	/**
+	 * @see HtmlCompressor#setCharset(String)
+	 */
+	public void setCharset(String charset) {
+		this.charset = charset;
 	}
 
 	/**

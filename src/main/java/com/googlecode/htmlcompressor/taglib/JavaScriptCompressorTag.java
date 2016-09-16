@@ -50,6 +50,7 @@ public class JavaScriptCompressorTag extends BodyTagSupport {
 	
 	//Closure compressor settings
 	private String closureOptLevel = ClosureJavaScriptCompressor.COMPILATION_LEVEL_SIMPLE;
+	private String charsetOpt = "UTF-8";
 
 	@Override
 	public int doEndTag() throws JspException {
@@ -64,7 +65,7 @@ public class JavaScriptCompressorTag extends BodyTagSupport {
 				
 				if(jsCompressor.equalsIgnoreCase(HtmlCompressor.JS_COMPRESSOR_CLOSURE)) {
 					//call Closure compressor
-					ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor();
+					ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor(charsetOpt);
 					if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_ADVANCED)) {
 						closureCompressor.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
 					} else if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_WHITESPACE)) {
@@ -166,6 +167,18 @@ public class JavaScriptCompressorTag extends BodyTagSupport {
 	 */
 	public void setClosureOptLevel(String closureOptLevel) {
 		this.closureOptLevel = closureOptLevel;
+	}
+
+	/**
+	 * Sets charset if <a href="http://code.google.com/closure/compiler/">Google Closure Compiler</a> is used
+	 * for compressing inline JavaScript.
+	 *
+	 * @param charsetOpt Could be either <code>"UTF-8"</code> (used by default) or other canonical names
+	 *
+	 * @see java.nio.charset.Charset
+	 */
+	public void setCharsetOpt(String charsetOpt) {
+		this.charsetOpt = charsetOpt;
 	}
 
 }

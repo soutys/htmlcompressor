@@ -86,10 +86,12 @@ public class HtmlCompressorDirective extends Directive {
 		htmlCompressor.setRemoveHttpsProtocol(rs.getBoolean("userdirective.compressHtml.removeHttpsProtocol", false));
 		
 		
+		String charset = rs.getString("userdirective.compressHtml.charset", "UTF-8");
+
 		if(compressJavaScript && rs.getString("userdirective.compressHtml.jsCompressor", HtmlCompressor.JS_COMPRESSOR_YUI).equalsIgnoreCase(HtmlCompressor.JS_COMPRESSOR_CLOSURE)) {
 			String closureOptLevel = rs.getString("userdirective.compressHtml.closureOptLevel", ClosureJavaScriptCompressor.COMPILATION_LEVEL_SIMPLE);
 			
-			ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor();
+			ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor(charset);
 			if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_ADVANCED)) {
 				closureCompressor.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
 			} else if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_WHITESPACE)) {

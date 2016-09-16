@@ -59,6 +59,7 @@ public class JavaScriptCompressorDirective extends Directive {
 	
 	//Closure compressor settings
 	private String closureOptLevel = ClosureJavaScriptCompressor.COMPILATION_LEVEL_SIMPLE;
+	private String charsetOpt = "UTF-8";
 
 	public String getName() {
 		return "compressJs";
@@ -75,6 +76,7 @@ public class JavaScriptCompressorDirective extends Directive {
 		
 		//set compressor properties
 		enabled = rs.getBoolean("userdirective.compressJs.enabled", true);
+		charsetOpt = rs.getString("userdirective.compressHtml.charset", "UTF-8");
 		jsCompressor = rs.getString("userdirective.compressHtml.jsCompressor", HtmlCompressor.JS_COMPRESSOR_YUI);
 		yuiJsNoMunge = rs.getBoolean("userdirective.compressJs.yuiJsNoMunge", false);
 		yuiJsPreserveAllSemiColons = rs.getBoolean("userdirective.compressJs.yuiJsPreserveAllSemiColons", false);
@@ -96,7 +98,7 @@ public class JavaScriptCompressorDirective extends Directive {
 				
 				if(jsCompressor.equalsIgnoreCase(HtmlCompressor.JS_COMPRESSOR_CLOSURE)) {
 					//call Closure compressor
-					ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor();
+					ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor(charsetOpt);
 					if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_ADVANCED)) {
 						closureCompressor.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
 					} else if(closureOptLevel.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_WHITESPACE)) {

@@ -29,13 +29,15 @@ import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
 public class HtmlAnalyzer {
 	
 	private String jsCompressor = HtmlCompressor.JS_COMPRESSOR_YUI;
+	private String charsetOpt;
 	
-	public HtmlAnalyzer() { 
-		
+	public HtmlAnalyzer(String charsetOpt) {
+		this.charsetOpt = charsetOpt;
 	}
 
-	public HtmlAnalyzer(String jsCompressor) { 
+	public HtmlAnalyzer(String jsCompressor, String charsetOpt) {
 		this.jsCompressor = jsCompressor;
+		this.charsetOpt = charsetOpt;
 	}
 	
 	public void analyze(String source) {
@@ -181,7 +183,7 @@ public class HtmlAnalyzer {
 			//inline js yui
 			try {
 				compressor.setCompressJavaScript(true);
-				compressor.setJavaScriptCompressor(new ClosureJavaScriptCompressor());
+				compressor.setJavaScriptCompressor(new ClosureJavaScriptCompressor(charsetOpt));
 				compResult = compressor.compress(source);
 				System.out.println(formatLine("Compress JS (Closure)", originalSize, compResult.length(), prevSize));
 				prevSize = compResult.length();

@@ -14,9 +14,9 @@ package com.googlecode.htmlcompressor;
  * limitations under the License.
  */
 
-import jargs.gnu.CmdLineParser;
-import jargs.gnu.CmdLineParser.Option;
-import jargs.gnu.CmdLineParser.OptionException;
+import com.sanityinc.jargs.CmdLineParser;
+import com.sanityinc.jargs.CmdLineParser.Option;
+import com.sanityinc.jargs.CmdLineParser.OptionException;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -31,6 +31,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +101,7 @@ public class CmdLineCompressor {
 	
 	private String closureOptLevelOpt;
 	private boolean closureCustomExternsOnlyOpt;
-	private List<String> closureExternsOpt;
+	private Collection<String> closureExternsOpt;
 	
 	private String[] fileArgsOpt;
 	
@@ -112,48 +113,48 @@ public class CmdLineCompressor {
 	public CmdLineCompressor(String[] args) {
 		CmdLineParser parser = new CmdLineParser();
 
-		Option helpOpt = parser.addBooleanOption('h', "help");
-		Option helpOptAlt = parser.addBooleanOption('?', "help_alt");
-		Option analyzeOpt = parser.addBooleanOption('a', "analyze");
-		Option recursiveOpt = parser.addBooleanOption('r', "recursive");
-		Option charsetOpt = parser.addStringOption('c', "charset");
-		Option outputFilenameOpt = parser.addStringOption('o', "output");
-		Option patternsFilenameOpt = parser.addStringOption('p', "preserve");
-		Option typeOpt = parser.addStringOption('t', "type");
-		Option filemaskOpt = parser.addStringOption('m', "mask");
-		Option preserveCommentsOpt = parser.addBooleanOption("preserve-comments");
-		Option preserveIntertagSpacesOpt = parser.addBooleanOption("preserve-intertag-spaces");
-		Option preserveMultiSpacesOpt = parser.addBooleanOption("preserve-multi-spaces");
-		Option removeIntertagSpacesOpt = parser.addBooleanOption("remove-intertag-spaces");
-		Option removeSurroundingSpacesOpt = parser.addStringOption("remove-surrounding-spaces");
-		Option removeQuotesOpt = parser.addBooleanOption("remove-quotes");
-		Option preserveLineBreaksOpt = parser.addBooleanOption("preserve-line-breaks");
-		Option preservePhpTagsOpt = parser.addBooleanOption("preserve-php");
-		Option preserveServerScriptTagsOpt = parser.addBooleanOption("preserve-server-script");
-		Option preserveSsiTagsOpt = parser.addBooleanOption("preserve-ssi");
-		Option compressJsOpt = parser.addBooleanOption("compress-js");
-		Option compressCssOpt = parser.addBooleanOption("compress-css");
-		Option jsCompressorOpt = parser.addStringOption("js-compressor");
+		Option<Boolean> helpOpt = parser.addBooleanOption('h', "help");
+		Option<Boolean> helpOptAlt = parser.addBooleanOption('?', "help_alt");
+		Option<Boolean> analyzeOpt = parser.addBooleanOption('a', "analyze");
+		Option<Boolean> recursiveOpt = parser.addBooleanOption('r', "recursive");
+		Option<String> charsetOpt = parser.addStringOption('c', "charset");
+		Option<String> outputFilenameOpt = parser.addStringOption('o', "output");
+		Option<String> patternsFilenameOpt = parser.addStringOption('p', "preserve");
+		Option<String> typeOpt = parser.addStringOption('t', "type");
+		Option<String> filemaskOpt = parser.addStringOption('m', "mask");
+		Option<Boolean> preserveCommentsOpt = parser.addBooleanOption("preserve-comments");
+		Option<Boolean> preserveIntertagSpacesOpt = parser.addBooleanOption("preserve-intertag-spaces");
+		Option<Boolean> preserveMultiSpacesOpt = parser.addBooleanOption("preserve-multi-spaces");
+		Option<Boolean> removeIntertagSpacesOpt = parser.addBooleanOption("remove-intertag-spaces");
+		Option<String> removeSurroundingSpacesOpt = parser.addStringOption("remove-surrounding-spaces");
+		Option<Boolean> removeQuotesOpt = parser.addBooleanOption("remove-quotes");
+		Option<Boolean> preserveLineBreaksOpt = parser.addBooleanOption("preserve-line-breaks");
+		Option<Boolean> preservePhpTagsOpt = parser.addBooleanOption("preserve-php");
+		Option<Boolean> preserveServerScriptTagsOpt = parser.addBooleanOption("preserve-server-script");
+		Option<Boolean> preserveSsiTagsOpt = parser.addBooleanOption("preserve-ssi");
+		Option<Boolean> compressJsOpt = parser.addBooleanOption("compress-js");
+		Option<Boolean> compressCssOpt = parser.addBooleanOption("compress-css");
+		Option<String> jsCompressorOpt = parser.addStringOption("js-compressor");
 		
-		Option simpleDoctypeOpt = parser.addBooleanOption("simple-doctype");
-		Option removeScriptAttributesOpt = parser.addBooleanOption("remove-script-attr");
-		Option removeStyleAttributesOpt = parser.addBooleanOption("remove-style-attr");
-		Option removeLinkAttributesOpt = parser.addBooleanOption("remove-link-attr");
-		Option removeFormAttributesOpt = parser.addBooleanOption("remove-form-attr");
-		Option removeInputAttributesOpt = parser.addBooleanOption("remove-input-attr");
-		Option simpleBooleanAttributesOpt = parser.addBooleanOption("simple-bool-attr");
-		Option removeJavaScriptProtocolOpt = parser.addBooleanOption("remove-js-protocol");
-		Option removeHttpProtocolOpt = parser.addBooleanOption("remove-http-protocol");
-		Option removeHttpsProtocolOpt = parser.addBooleanOption("remove-https-protocol");
+		Option<Boolean> simpleDoctypeOpt = parser.addBooleanOption("simple-doctype");
+		Option<Boolean> removeScriptAttributesOpt = parser.addBooleanOption("remove-script-attr");
+		Option<Boolean> removeStyleAttributesOpt = parser.addBooleanOption("remove-style-attr");
+		Option<Boolean> removeLinkAttributesOpt = parser.addBooleanOption("remove-link-attr");
+		Option<Boolean> removeFormAttributesOpt = parser.addBooleanOption("remove-form-attr");
+		Option<Boolean> removeInputAttributesOpt = parser.addBooleanOption("remove-input-attr");
+		Option<Boolean> simpleBooleanAttributesOpt = parser.addBooleanOption("simple-bool-attr");
+		Option<Boolean> removeJavaScriptProtocolOpt = parser.addBooleanOption("remove-js-protocol");
+		Option<Boolean> removeHttpProtocolOpt = parser.addBooleanOption("remove-http-protocol");
+		Option<Boolean> removeHttpsProtocolOpt = parser.addBooleanOption("remove-https-protocol");
 
-		Option nomungeOpt = parser.addBooleanOption("nomunge");
-		Option linebreakOpt = parser.addStringOption("line-break");
-		Option preserveSemiOpt = parser.addBooleanOption("preserve-semi");
-		Option disableOptimizationsOpt = parser.addBooleanOption("disable-optimizations");
+		Option<Boolean> nomungeOpt = parser.addBooleanOption("nomunge");
+		Option<String> linebreakOpt = parser.addStringOption("line-break");
+		Option<Boolean> preserveSemiOpt = parser.addBooleanOption("preserve-semi");
+		Option<Boolean> disableOptimizationsOpt = parser.addBooleanOption("disable-optimizations");
 		
-		Option closureOptLevelOpt = parser.addStringOption("closure-opt-level");
-		Option closureCustomExternsOnlyOpt = parser.addBooleanOption("closure-custom-externs-only");
-		Option closureExternsOpt = parser.addStringOption("closure-externs");
+		Option<String> closureOptLevelOpt = parser.addStringOption("closure-opt-level");
+		Option<Boolean> closureCustomExternsOnlyOpt = parser.addBooleanOption("closure-custom-externs-only");
+		Option<String> closureExternsOpt = parser.addStringOption("closure-externs");
 		
 		try {
 			parser.parse(args);
@@ -191,7 +192,7 @@ public class CmdLineCompressor {
 			this.removeHttpsProtocolOpt = (Boolean)parser.getOptionValue(removeHttpsProtocolOpt, false);
 
 			this.nomungeOpt = (Boolean)parser.getOptionValue(nomungeOpt, false);
-			this.linebreakOpt = (Integer)parser.getOptionValue(linebreakOpt, -1);
+			this.linebreakOpt = Integer.parseInt((String)parser.getOptionValue(linebreakOpt, "-1"));
 			this.preserveSemiOpt = (Boolean)parser.getOptionValue(preserveSemiOpt, false);
 			this.disableOptimizationsOpt = (Boolean)parser.getOptionValue(disableOptimizationsOpt, false);
 
@@ -375,7 +376,7 @@ public class CmdLineCompressor {
 		
 		//switch js compressor to closure
 		if(compressJsOpt && useClosureCompressor) {
-			ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor();
+			ClosureJavaScriptCompressor closureCompressor = new ClosureJavaScriptCompressor(charsetOpt);
 
 			if(closureOptLevelOpt.equalsIgnoreCase(ClosureJavaScriptCompressor.COMPILATION_LEVEL_ADVANCED)) {
 				closureCompressor.setCompilationLevel(CompilationLevel.ADVANCED_OPTIMIZATIONS);
@@ -541,7 +542,9 @@ public class CmdLineCompressor {
 		if (stream != null) {
 			try {
 				stream.close();
-			} catch (IOException ignore) {}
+			} catch (IOException e) {
+				System.out.println("Stream closing error: " + e.getMessage());
+			}
 		}
 	}
 	

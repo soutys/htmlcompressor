@@ -17,6 +17,7 @@ package com.googlecode.htmlcompressor.compressor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,16 +51,19 @@ public class ClosureJavaScriptCompressor implements Compressor {
 	//Closure compiler default settings
 	private CompilerOptions compilerOptions = new CompilerOptions();
 	private CompilationLevel compilationLevel = CompilationLevel.SIMPLE_OPTIMIZATIONS;
+	private String charsetOpt;
 	private Level loggingLevel = Level.SEVERE;
 	private WarningLevel warningLevel = WarningLevel.DEFAULT;
 	private boolean customExternsOnly = false;
 	private List<SourceFile> externs = null;
 
-	public ClosureJavaScriptCompressor() {
+	public ClosureJavaScriptCompressor(String charsetOpt) {
+		this.charsetOpt = charsetOpt;
 	}
 
-	public ClosureJavaScriptCompressor(CompilationLevel compilationLevel) {
+	public ClosureJavaScriptCompressor(CompilationLevel compilationLevel, String charsetOpt) {
 		this.compilationLevel = compilationLevel;
+		this.charsetOpt = charsetOpt;
 	}
 
 	@Override
@@ -122,9 +126,10 @@ public class ClosureJavaScriptCompressor implements Compressor {
 		InputStream input = ClosureJavaScriptCompressor.class.getResourceAsStream("/externs.zip");
 		ZipInputStream zip = new ZipInputStream(input);
 		List<SourceFile> externs = Lists.newLinkedList();
+		Charset charset = Charset.forName(this.charsetOpt);
 		for (ZipEntry entry = null; (entry = zip.getNextEntry()) != null;) {
 			InputStream entryStream = ByteStreams.limit(zip, entry.getSize());
-			externs.add(SourceFile.fromInputStream(entry.getName(), entryStream));
+			externs.add(SourceFile.fromInputStream(entry.getName(), entryStream, charset));
 		}
 		return externs;
 	}
